@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class Server {
@@ -13,14 +14,24 @@ public class Server {
 
     public static void main(String[] args) {
         logger.info("tpe2-g3 Server Starting ...");
+        
+        var arguments = new CliParser().parse(args);
+        
+        if (arguments.isEmpty()){
+            logger.error("Error parsing arguments");
+            return;
+        }
+        
+        var parsedArguments = arguments.get();
+        
 
         // Config
         final Config config = new Config();
 
         // Group Config
         final GroupConfig groupConfig = new GroupConfig()
-                .setName("g3")
-                .setPassword("g3-pass");
+                .setName(Optional.ofNullable(parsedArguments.getHazelcastUsername()).orElse("g3"))
+                .setPassword(Optional.ofNullable(parsedArguments.getHazelcastPassword()).orElse("g3-pass"));
         config.setGroupConfig(groupConfig);
 
         // Network Config
@@ -30,16 +41,20 @@ public class Server {
                 .setMulticastConfig(multicastConfig);
 
         final InterfacesConfig interfacesConfig = new InterfacesConfig()
-                .setInterfaces(List.of("192.168.1.*"))
+                .setInterfaces(Optional.ofNullable(parsedArguments.getNetworkInterfaces()).orElse(List.of("192.168.0.*")))
                 .setEnabled(true);
 
         final NetworkConfig networkConfig = new NetworkConfig()
                 .setInterfaces(interfacesConfig)
                 .setJoin(joinConfig);
-
         config.setNetworkConfig(networkConfig);
-
-        // Start Cluster
-        Hazelcast.newHazelcastInstance(config);
+        
+        try {
+            // Start Cluster
+            Hazelcast.newHazelcastInstance(config);
+        }
+        finally {
+            Hazelcast.shutdownAll();
+        }
     }
 }
