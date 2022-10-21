@@ -3,7 +3,9 @@ package ar.edu.itba.pod.models;
 import lombok.Getter;
 import org.apache.commons.lang3.EnumUtils;
 
-public class Reading {
+import java.io.Serializable;
+
+public class Reading implements Serializable {
     
     public Reading(String row){
         String[] data = row.split(";");

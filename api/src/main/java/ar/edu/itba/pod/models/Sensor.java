@@ -2,17 +2,19 @@ package ar.edu.itba.pod.models;
 
 import lombok.Getter;
 
-public class Sensor {
+import java.io.Serializable;
+
+public class Sensor implements Serializable {
     
     public Sensor(String row){
         String[] data = row.split(";");
         this.Id = Integer.parseInt(data[0]);
-        this.Description = data[1];
+        this.Name = data[1];
         this.Status = switch (data[4]) {
             case "A" -> SensorStatus.ACTIVE;
             case "R" -> SensorStatus.REMOVED;           
             case "I" -> SensorStatus.INACTIVE;           
-            default -> throw new IllegalArgumentException("Unknown status: " + data[4]);
+            default -> throw new IllegalArgumentException("Unknown status: " + data[4] + " for sensor: " + data[1]);
         };
     }
     
@@ -20,7 +22,7 @@ public class Sensor {
     private final int Id;
     
     @Getter
-    private final String Description;
+    private final String Name;
     
     @Getter
     private final SensorStatus Status;

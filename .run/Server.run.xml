@@ -2,7 +2,7 @@
   <configuration default="false" name="Server" type="Application" factoryName="Application" nameIsGenerated="true">
     <option name="MAIN_CLASS_NAME" value="ar.edu.itba.pod.server.Server" />
     <module name="tpe2-g3-server" />
-    <option name="PROGRAM_PARAMETERS" value="-DnetworkInterfaces=192.168.0.* -DhazelcastUsername=g3 -DhazelcastPassword=pass" />
+    <option name="PROGRAM_PARAMETERS" value="-DnetworkInterfaces=127.0.0.*" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="ar.edu.itba.pod.server.*" />

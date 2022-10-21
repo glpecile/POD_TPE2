@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class Arguments {
-    protected final Logger logger = LoggerFactory.getLogger(Arguments.class);
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final static Pattern SERVER_ADDRESS_PATTERN = Pattern.
             compile("^(?<host>localhost|\\d?\\d?\\d(?:\\.\\d{1,3}){3}):(?<port>\\d{1,4})$");

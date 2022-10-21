@@ -49,12 +49,6 @@ public class Server {
                 .setJoin(joinConfig);
         config.setNetworkConfig(networkConfig);
         
-        try {
-            // Start Cluster
-            Hazelcast.newHazelcastInstance(config);
-        }
-        finally {
-            Hazelcast.shutdownAll();
-        }
+        Hazelcast.newHazelcastInstance(config);
     }
 }

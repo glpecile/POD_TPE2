@@ -2,7 +2,7 @@ package ar.edu.itba.pod.models;
 
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SensorTests {
     
@@ -10,12 +10,12 @@ public class SensorTests {
     public void testParsing (){
         // Arrange
         var id = 45;
-        var description = "Little Collins St-Swanston St (East)";
+        var Name = "Little Collins St-Swanston St (East)";
         var status = "A";
         
         var row = String.join(";",
             String.valueOf(id),
-            description,
+            Name,
                 "Swa148_T",
                 "2017/06/29",
                 status,
@@ -32,7 +32,7 @@ public class SensorTests {
         
         // Assert
         assertThat(sensor.getId()).isEqualTo(id);   
-        assertThat(sensor.getDescription()).isEqualTo(description);
+        assertThat(sensor.getName()).isEqualTo(Name);
         assertThat(sensor.getStatus()).isEqualTo(SensorStatus.ACTIVE);
     }
 }
