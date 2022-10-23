@@ -16,9 +16,9 @@ public class QueryMapper implements Mapper<String, Tuple<Integer,Integer>,String
     }
 
     @Override
-    public void map(String s, Tuple<Integer,Integer> reading, Context<String, Long> context) {
-        var sensor = sensors.get(reading.first());
+    public void map(String listName, Tuple<Integer,Integer> readingValue, Context<String, Long> context) {
+        var sensor = sensors.get(readingValue.getFirst());
         if (sensor.getStatus() == SensorStatus.ACTIVE)
-            context.emit(sensor.getName(), Long.valueOf(reading.second()));
+            context.emit(sensor.getName(), Long.valueOf(readingValue.getSecond()));
     }
 }

@@ -5,7 +5,7 @@ import com.hazelcast.mapreduce.CombinerFactory;
 
 public class QueryCombinerFactory implements CombinerFactory<String,Long,Long> {
     @Override
-    public Combiner<Long, Long> newCombiner(String integer) {
+    public Combiner<Long, Long> newCombiner(String sensorName) {
         return new QueryCombiner();
     }
 
@@ -13,8 +13,8 @@ public class QueryCombinerFactory implements CombinerFactory<String,Long,Long> {
         private long sum = 0;
 
         @Override
-        public  void combine(Long integer) {
-            sum += integer;
+        public  void combine(Long hourlyCount) {
+            sum += hourlyCount;
         }
         
         @Override

@@ -44,7 +44,7 @@ public class Client {
             .orElse("/time1.csv");
     
     public static void main(String[] args) {
-        logger.info("Query 1 client starting...");
+        logger.info("Query 1 starting...");
         
         var parser = new CliParser();
         var arguments = parser.parse(args);
@@ -119,6 +119,7 @@ public class Client {
          finally {
             // Shutdown
             HazelcastClient.shutdownAll();
+            logger.info("Query 1 finished!");
         }
     }
 }

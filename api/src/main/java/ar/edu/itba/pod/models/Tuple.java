@@ -16,14 +16,6 @@ public final class Tuple<T, K> implements Serializable {
         this.second = second;
     }
 
-    public T first() {
-        return first;
-    }
-
-    public K second() {
-        return second;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
