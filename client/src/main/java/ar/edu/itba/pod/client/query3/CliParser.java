@@ -1,10 +1,14 @@
 package ar.edu.itba.pod.client.query3;
 
+import ar.edu.itba.pod.client.models.Arguments;
 import ar.edu.itba.pod.client.utils.BaseParser;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
+import java.util.Optional;
 
 public class CliParser extends BaseParser {
     @Override
@@ -30,7 +34,7 @@ public class CliParser extends BaseParser {
             logger.error("Invalid argument for Dmin: {}", cmd.getOptionValue("Dmin"));
         }
         return args;
-    } 
+    }
     
 
     public static class Arguments extends ar.edu.itba.pod.client.models.Arguments{

@@ -33,6 +33,7 @@ public class Arguments {
     @Getter
     @Setter
     private String hazelcastPassword = null;
+
     
     public boolean isValid(){
         return hazelcastServers.size() > 0 
