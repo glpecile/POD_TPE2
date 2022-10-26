@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.io.Serializable;
 import java.util.Objects;
 
-public final class Tuple<T, K> implements Serializable {
+public class Tuple<T, K> implements Serializable {
     @Getter
     private final T first;
     @Getter
@@ -15,7 +15,7 @@ public final class Tuple<T, K> implements Serializable {
         this.first = first;
         this.second = second;
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
