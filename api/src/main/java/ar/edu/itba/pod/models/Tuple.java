@@ -1,17 +1,23 @@
 package ar.edu.itba.pod.models;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 public class Tuple<T, K> implements Serializable {
     @Getter
-    private final T first;
+    @Setter
+    private T first;
     @Getter
-    private final K second;
+    @Setter
+    private K second;
 
-    public Tuple(T first,K second) {
+    public Tuple() {
+    }
+
+    public Tuple(T first, K second) {
         this.first = first;
         this.second = second;
     }
