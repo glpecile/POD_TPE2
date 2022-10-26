@@ -1,14 +1,10 @@
 package ar.edu.itba.pod.client.query3;
 
-import ar.edu.itba.pod.client.models.Arguments;
 import ar.edu.itba.pod.client.utils.BaseParser;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-
-import java.util.Optional;
 
 public class CliParser extends BaseParser {
     @Override

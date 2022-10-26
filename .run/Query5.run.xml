@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Query5" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="ar.edu.itba.pod.client.query5.Client" />
+    <module name="tpe2-g3-client" />
+    <option name="PROGRAM_PARAMETERS" value="-Daddresses=127.0.0.1:5701 DinPath=$ProjectFileDir$/resources -DoutPath=$ProjectFileDir$/resources" />
+    <option name="VM_PARAMETERS" value="-Dhazelcast.logging.type=none " />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="ar.edu.itba.pod.client.query1.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
