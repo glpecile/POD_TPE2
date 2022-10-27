@@ -73,6 +73,9 @@ public class Client {
                     .map(r -> new QueryReading(r.getSensorId(), r.getMonth(), r.getHourlyCount()))
                     .toList();
 
+            var sensorNames = sensors.values().stream().collect(Collectors.toMap(Sensor::getId, Sensor::getName));
+
+
             logger.info("Read {} sensors and {} readings", sensors.size(), readings.size());
             timer.endLoadingDataFromFile();
 
@@ -95,7 +98,7 @@ public class Client {
             timer.startMapReduce();
 
             var future = job
-                    .mapper(new QueryMapper(sensors))
+                    .mapper(new QueryMapper(sensorNames))
                     .reducer(new QueryReducerFactory())
                     .submit(new QueryCollator(arguments.getN()));
 
@@ -118,6 +121,7 @@ public class Client {
         } catch (Exception e) {
             logger.error("Unexpected error: {}", e.getMessage(), e);
         } finally {
+            logger.info("Query 4 listo");
             // Shutdown
             HazelcastClient.shutdownAll();
         }

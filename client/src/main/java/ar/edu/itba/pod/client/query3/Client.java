@@ -70,6 +70,8 @@ public class Client {
                     .map(t ->new QueryReading(t.getSensorId(), t.getHourlyCount(), String.format("%d/%s/%d %d:00", t.getDayOfTheMonth(),  MonthToNum(t.getMonth()), t.getYear(), t.getHourOfTheDay() )))
                     .toList();
 
+            var sensorsNames = sensors.values().stream().collect(Collectors.toMap(Sensor::getId, Sensor::getName));
+
             log.info("Read {} sensors and {} readings", sensors.size(), readings.size());
             timer.endLoadingDataFromFile();
 
@@ -95,7 +97,7 @@ public class Client {
 
             var arg = (CliParser.Arguments) arguments.get();
             var future = job
-                    .mapper(new QueryMapper(sensors, arg.getMin()))
+                    .mapper(new QueryMapper(sensorsNames, arg.getMin()))
 //                    .combiner(new QueryCombinerFactory())
                     .reducer(new QueryReducerFactory())
                     .submit(new QueryCollator());

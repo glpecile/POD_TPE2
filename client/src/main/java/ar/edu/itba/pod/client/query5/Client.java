@@ -67,8 +67,8 @@ public class Client {
                     .map(t -> new Tuple<>(t.getSensorId(), t.getHourlyCount()))
                     .toList();
 
-
-
+            var sensorNames = sensors.values().stream().collect(Collectors.toMap(Sensor::getId, Sensor::getName));
+            
             logger.info("Read {} sensors and {} readings", sensors.size(), readings.size());
             timer.endLoadingDataFromFile();
 
@@ -90,7 +90,7 @@ public class Client {
             timer.startMapReduce();
 
             var future = job
-                    .mapper(new QueryMapper(sensors))
+                    .mapper(new QueryMapper(sensorNames))
                     .combiner(new QueryCombinerFactory())
                     .reducer(new QueryReducerFactory())
                     .submit(new QueryCollator());

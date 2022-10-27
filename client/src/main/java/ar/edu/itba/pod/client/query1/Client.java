@@ -4,6 +4,7 @@ import ar.edu.itba.pod.client.utils.Hazelcast;
 import ar.edu.itba.pod.client.utils.PerformanceTimer;
 import ar.edu.itba.pod.csv.CsvHelper;
 import ar.edu.itba.pod.models.Sensor;
+import ar.edu.itba.pod.models.SensorStatus;
 import ar.edu.itba.pod.models.Tuple;
 import ar.edu.itba.pod.query1.QueryCollator;
 import ar.edu.itba.pod.query1.QueryCombinerFactory;
@@ -62,12 +63,16 @@ public class Client {
             timer.startLoadingDataFromFile();
             var sensors = CsvHelper.parseSensorFile(inPath + SENSORS_FILE_NAME)
                     .stream()
+                    .filter(t->t.getStatus().equals(SensorStatus.ACTIVE))
                     .collect(Collectors.toMap(Sensor::getId, t->t));
 
             var readings = CsvHelper.parseReadingsFile(inPath + READINGS_FILE_NAME)
                     .stream()
+                    .filter(t-> sensors.containsKey(t.getSensorId()))
                     .map(t -> new Tuple<>(t.getSensorId(), t.getHourlyCount()))
                     .toList();
+            
+            var sensorsNames = sensors.values().stream().collect(Collectors.toMap(Sensor::getId, Sensor::getName));
 
             logger.info("Read {} sensors and {} readings", sensors.size(), readings.size());
             timer.endLoadingDataFromFile();
@@ -91,8 +96,8 @@ public class Client {
             timer.startMapReduce();
             
             var future = job
-                    .mapper(new QueryMapper(sensors))
-                    .combiner(new QueryCombinerFactory())
+                    .mapper(new QueryMapper(sensorsNames))
+//                    .combiner(new QueryCombinerFactory())
                     .reducer(new QueryReducerFactory())
                     .submit(new QueryCollator());
             
