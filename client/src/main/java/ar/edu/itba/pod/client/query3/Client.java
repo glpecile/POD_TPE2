@@ -7,6 +7,7 @@ import ar.edu.itba.pod.client.utils.PerformanceTimer;
 import ar.edu.itba.pod.csv.CsvHelper;
 import ar.edu.itba.pod.models.Month;
 import ar.edu.itba.pod.models.Sensor;
+import ar.edu.itba.pod.models.SensorStatus;
 import ar.edu.itba.pod.models.Tuple;
 import ar.edu.itba.pod.query3.*;
 import com.hazelcast.client.HazelcastClient;
@@ -64,9 +65,11 @@ public class Client {
             timer.startLoadingDataFromFile();
             var sensors = CsvHelper.parseSensorFile(inPath + SENSORS_FILE_NAME)
                     .stream()
+                    .filter(t-> t.getStatus().equals(SensorStatus.ACTIVE))
                     .collect(Collectors.toMap(Sensor::getId, t->t));
             var readings = CsvHelper.parseReadingsFile(inPath + READINGS_FILE_NAME)
                     .stream()
+                    .filter(t-> sensors.containsKey(t.getSensorId()))
                     .map(t ->new QueryReading(t.getSensorId(), t.getHourlyCount(), String.format("%d/%s/%d %d:00", t.getDayOfTheMonth(),  MonthToNum(t.getMonth()), t.getYear(), t.getHourOfTheDay() )))
                     .toList();
 
