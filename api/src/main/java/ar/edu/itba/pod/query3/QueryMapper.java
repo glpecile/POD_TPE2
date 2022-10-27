@@ -11,11 +11,9 @@ import java.util.Map;
 public class QueryMapper implements Mapper<String,QueryReading,String,Tuple<Long, String>> {
     private final Map<Integer, String> sensors;
 
-    private final int minPedestrians;
 
-    public QueryMapper(Map<Integer, String> sensors, int minPedestrians) {
+    public QueryMapper(Map<Integer, String> sensors) {
         this.sensors = sensors;
-        this.minPedestrians = minPedestrians;
     }
 
     public void map(String s, QueryReading reading, Context<String,Tuple<Long, String>> context) {

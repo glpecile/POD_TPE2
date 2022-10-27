@@ -100,7 +100,7 @@ public class Client {
 
 
             var future = job
-                    .mapper(new QueryMapper(sensorsNames, arg.getMin()))
+                    .mapper(new QueryMapper(sensorsNames))
 //                    .combiner(new QueryCombinerFactory())
                     .reducer(new QueryReducerFactory())
                     .submit(new QueryCollator());
