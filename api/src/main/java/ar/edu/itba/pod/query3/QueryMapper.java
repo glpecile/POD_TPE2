@@ -20,8 +20,7 @@ public class QueryMapper implements Mapper<String,QueryReading,String,Tuple<Long
 
     public void map(String s, QueryReading reading, Context<String,Tuple<Long, String>> context) {
         var sensorName = sensors.get(reading.getId());
-        if (reading.getCount() >= minPedestrians)
-            context.emit(sensorName,new Tuple<>(Long.valueOf(reading.getCount()), reading.getDate_time()));
+        context.emit(sensorName,new Tuple<>(Long.valueOf(reading.getCount()), reading.getDate_time()));
     }
 
 
