@@ -11,6 +11,7 @@
     - [Query 3](#query-3)
     - [Query 4](#query-4)
   - [Query 5](#query-5)
+  - [Informe](#informe)
 
 ## Autores
 
@@ -38,14 +39,15 @@ mvn clean install
 Para la ejecución del proyecto, es necesario ejecutar los siguientes comandos:
 
 ```bash
-cd scripts
-chmod u+x query[num].sh
-chmod u+x server.sh
-./server.sh [...params]
-./query[nun].sh [...params]
+chmod u+x /scripts/*
+./scripts/server.sh [...params]
+./scripts/query[x].sh [...params]
 ```
 
-Donde `num` es un número entre 1 y 5 perteniente a la query deseada a ejecutar.
+El servidor se corre en una terminal y el cliente en otra.
+
+Donde `[x]` es un número entre 1 y 5 perteniente a la query deseada a ejecutar.
+A su vez, `[...params]` son los parámetros para la query y se detallan a continuación:
 
 ### Server
 
@@ -136,3 +138,7 @@ Donde:
 | `-Daddresses` | Dirección IP del nodo que ejecuta el servidor. |
 | `-DinPath` | Directorio donde se encuentran los archivos de entrada. |
 | `-DoutPath` | Directorio donde se guardarán los archivos de salida. |
+
+## Informe
+
+La presentación se encuentra en el [directorio `/docs` del proyecto](/docs/POD-TPE2-G3-Informe.pdf).

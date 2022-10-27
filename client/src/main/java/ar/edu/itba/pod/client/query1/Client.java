@@ -43,13 +43,13 @@ public class Client {
     private final static String TIME_FILE_NAME = Optional
             .ofNullable(System.getenv("EXPORT_FILE_NAME"))
             .orElse("/time1.csv");
-    
+
     public static void main(String[] args) {
         logger.info("Query 1 starting...");
-        
+
         var parser = new CliParser();
         var arguments = parser.parse(args);
-        
+
         if (arguments.isEmpty()) {
             logger.error("Invalid arguments");
             return;
@@ -58,49 +58,49 @@ public class Client {
         var inPath = arguments.get().getInPath();
 
         try {
-            @Cleanup var timer = new PerformanceTimer(arguments.get().getOutPath() + TIME_FILE_NAME,logger);
+            @Cleanup var timer = new PerformanceTimer(arguments.get().getOutPath() + TIME_FILE_NAME, logger);
 
             timer.startLoadingDataFromFile();
             var sensors = CsvHelper.parseSensorFile(inPath + SENSORS_FILE_NAME)
                     .stream()
-                    .filter(t->t.getStatus().equals(SensorStatus.ACTIVE))
-                    .collect(Collectors.toMap(Sensor::getId, t->t));
+                    .filter(t -> t.getStatus().equals(SensorStatus.ACTIVE))
+                    .collect(Collectors.toMap(Sensor::getId, t -> t));
 
             var readings = CsvHelper.parseReadingsFile(inPath + READINGS_FILE_NAME)
                     .stream()
-                    .filter(t-> sensors.containsKey(t.getSensorId()))
+                    .filter(t -> sensors.containsKey(t.getSensorId()))
                     .map(t -> new Tuple<>(t.getSensorId(), t.getHourlyCount()))
                     .toList();
-            
+
             var sensorsNames = sensors.values().stream().collect(Collectors.toMap(Sensor::getId, Sensor::getName));
 
             logger.info("Read {} sensors and {} readings", sensors.size(), readings.size());
             timer.endLoadingDataFromFile();
-            
+
             logger.info("Starting Hazelcast client...");
             var hazelcast = Hazelcast.connect(arguments.get());
             logger.info("Hazelcast client started!");
-            
+
             timer.startLoadingDataToHazelcast();
-            
-            IList<Tuple<Integer,Integer>> readingsList = hazelcast.getList(HZ_READINGS_LIST);
+
+            IList<Tuple<Integer, Integer>> readingsList = hazelcast.getList(HZ_READINGS_LIST);
             readingsList.clear();
             readingsList.addAll(readings);
-            
+
             timer.endLoadingDataToHazelcast();
-            
+
             var dataSource = KeyValueSource.fromList(readingsList);
             var jobTracker = hazelcast.getJobTracker(HZ_JOB_TRACKER);
             var job = jobTracker.newJob(dataSource);
-            
+
             timer.startMapReduce();
-            
+
             var future = job
                     .mapper(new QueryMapper(sensorsNames))
-//                    .combiner(new QueryCombinerFactory())
+                    .combiner(new QueryCombinerFactory())
                     .reducer(new QueryReducerFactory())
                     .submit(new QueryCollator());
-            
+
             var result = future.get();
 
             CsvHelper.writeFile(
@@ -109,21 +109,18 @@ public class Client {
                     result,
                     entry -> entry.getKey() + ";" + entry.getValue()
             );
-            
+
             timer.endMapReduce();
             readingsList.clear();
 
 
         } catch (IOException e) {
-           logger.error("The files 'sensors.csv' and 'readings.csv' are not in the specified inFolder: {}", arguments.get().getInPath());
-        }
-        catch (InterruptedException | ExecutionException e) {
-            logger.error("Hazelcast execution error {}",e.getMessage(),e);
-        }
-        catch (Exception e){
-            logger.error("Unexpected error: {}",e.getMessage(),e);
-        }
-         finally {
+            logger.error("The files 'sensors.csv' and 'readings.csv' are not in the specified inFolder: {}", arguments.get().getInPath());
+        } catch (InterruptedException | ExecutionException e) {
+            logger.error("Hazelcast execution error {}", e.getMessage(), e);
+        } catch (Exception e) {
+            logger.error("Unexpected error: {}", e.getMessage(), e);
+        } finally {
             // Shutdown
             HazelcastClient.shutdownAll();
             logger.info("Query 1 finished!");
