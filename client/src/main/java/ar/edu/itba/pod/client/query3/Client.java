@@ -96,7 +96,7 @@ public class Client {
             var arg = (CliParser.Arguments) arguments.get();
             var future = job
                     .mapper(new QueryMapper(sensors, arg.getMin()))
-                    .combiner(new QueryCombinerFactory())
+//                    .combiner(new QueryCombinerFactory())
                     .reducer(new QueryReducerFactory())
                     .submit(new QueryCollator());
 
@@ -110,8 +110,7 @@ public class Client {
                         entry -> entry.getKey() + ";" + entry.getValue().getFirst()+ ";" + entry.getValue().getSecond()
             );
 
-
-
+            timer.endMapReduce();
 
             readingsList.clear();
             
@@ -125,6 +124,7 @@ public class Client {
         }
         finally {
             // Shutdown
+            log.info("Query 3 finished");
             HazelcastClient.shutdownAll();
         }
     }
