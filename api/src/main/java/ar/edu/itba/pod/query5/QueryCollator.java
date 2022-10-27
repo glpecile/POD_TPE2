@@ -68,7 +68,7 @@ public class QueryCollator implements Collator<Map.Entry<String,Long>, TreeMap<L
             public int compare(AuxTuple<String, String> o1, AuxTuple<String, String> o2) {
                 //compare the first element with the first and second element of the tuple
 
-                var firstComparison = o1.getFirst().compareTo(o2.getFirst()) ;
+                var firstComparison = o2.getFirst().compareTo(o1.getFirst()) ;
                 return firstComparison == 0 ? o1.getSecond().compareTo(o2.getSecond()) : firstComparison;
             }
         }
