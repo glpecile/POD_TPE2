@@ -45,7 +45,12 @@ public class QueryReducerFactory implements ReducerFactory<String, QueryReading,
                     maxMonth = entry.getKey();
                 }
             }
-            return new Tuple<>(maxMonth, maxAvg);
+            return new Tuple<>(maxMonth, round(maxAvg, 2));
+        }
+
+        private double round(double value, int decimals) {
+            double scale = Math.pow(10, decimals);
+            return Math.round(value * scale) / scale;
         }
     }
 }
