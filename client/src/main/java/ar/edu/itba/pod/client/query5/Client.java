@@ -4,6 +4,7 @@ import ar.edu.itba.pod.client.utils.Hazelcast;
 import ar.edu.itba.pod.client.utils.PerformanceTimer;
 import ar.edu.itba.pod.csv.CsvHelper;
 import ar.edu.itba.pod.models.Sensor;
+import ar.edu.itba.pod.models.SensorStatus;
 import ar.edu.itba.pod.models.Tuple;
 import ar.edu.itba.pod.query5.QueryCollator;
 import ar.edu.itba.pod.query5.QueryCombinerFactory;
@@ -61,9 +62,11 @@ public class Client {
             @Cleanup var timer = new PerformanceTimer(arguments.get().getOutPath() + TIME_FILE_NAME,logger);
             timer.startLoadingDataFromFile();
             var sensors = CsvHelper.parseSensorFile(inPath + SENSORS_FILE_NAME).stream()
+                    .filter(s-> s.getStatus() == SensorStatus.ACTIVE)
                     .collect(Collectors.toMap(Sensor::getId, sensor -> sensor));
 
             var readings = CsvHelper.parseReadingsFile(inPath + READINGS_FILE_NAME).stream()
+                    .filter(r -> sensors.containsKey(r.getSensorId()))
                     .map(t -> new Tuple<>(t.getSensorId(), t.getHourlyCount()))
                     .toList();
 
