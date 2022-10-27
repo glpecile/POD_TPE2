@@ -58,7 +58,7 @@ public class Client {
             return;
         }
         var inPath = arguments.get().getInPath();
-
+        var arg = (CliParser.Arguments) arguments.get();
         try {
             @Cleanup var timer = new PerformanceTimer(arguments.get().getOutPath() + TIME_FILE_NAME, log);
 
@@ -69,7 +69,7 @@ public class Client {
                     .collect(Collectors.toMap(Sensor::getId, t->t));
             var readings = CsvHelper.parseReadingsFile(inPath + READINGS_FILE_NAME)
                     .stream()
-                    .filter(t-> sensors.containsKey(t.getSensorId()))
+                    .filter(t-> (sensors.containsKey(t.getSensorId())) && (t.getHourlyCount() > arg.getMin()))
                     .map(t ->new QueryReading(t.getSensorId(), t.getHourlyCount(), String.format("%d/%s/%d %d:00", t.getDayOfTheMonth(),  MonthToNum(t.getMonth()), t.getYear(), t.getHourOfTheDay() )))
                     .toList();
 
@@ -98,7 +98,7 @@ public class Client {
             timer.startMapReduce();
 
 
-            var arg = (CliParser.Arguments) arguments.get();
+
             var future = job
                     .mapper(new QueryMapper(sensorsNames, arg.getMin()))
 //                    .combiner(new QueryCombinerFactory())
