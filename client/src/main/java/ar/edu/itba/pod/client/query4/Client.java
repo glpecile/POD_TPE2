@@ -109,6 +109,8 @@ public class Client {
             );
 
             timer.endMapReduce();
+            readingsList.clear();
+            
         } catch (IOException e) {
             logger.error("The files 'sensors.csv' and 'readings.csv' are not in the specified inFolder: {}", arguments.getInPath());
         } catch (InterruptedException | ExecutionException e) {

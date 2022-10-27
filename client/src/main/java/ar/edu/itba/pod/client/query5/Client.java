@@ -79,9 +79,8 @@ public class Client {
             timer.startLoadingDataToHazelcast();
 
             IList<Tuple<Integer,Integer>> readingList = hazelcast.getList(HZ_READINGS_LIST);
-            readingList.clear();
             readingList.addAll(readings);
-
+            readingList.clear();
             timer.endLoadingDataToHazelcast();
 
             var dataSource = KeyValueSource.fromList(readingList);
@@ -97,13 +96,15 @@ public class Client {
                     .submit(new QueryCollator());
             var result = future.get();
 
-            timer.endMapReduce();
-
             CsvHelper.writeFile(
                     arguments.get().getOutPath() + EXPORT_FILE_NAME,
                     "Group;Sensor A;Sensor B",
                     result
             );
+
+            timer.endMapReduce();
+            readingList.clear();
+
 
         } catch (IOException | ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
