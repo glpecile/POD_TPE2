@@ -79,6 +79,7 @@ public class Client {
             timer.startLoadingDataToHazelcast();
 
             IList<Tuple<Integer,Integer>> readingList = hazelcast.getList(HZ_READINGS_LIST);
+            readingList.clear();
             readingList.addAll(readings);
             timer.endLoadingDataToHazelcast();
 
