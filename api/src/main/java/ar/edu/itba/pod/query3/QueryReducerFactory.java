@@ -9,14 +9,14 @@ public class QueryReducerFactory implements ReducerFactory<String, Tuple<Long, S
     public Reducer<Tuple<Long, String>, Tuple<Long, String>> newReducer(String integer) {
         return new QueryReducer();
     }
-    private class QueryReducer extends Reducer<Tuple<Long, String>, Tuple<Long, String>> {
-            private volatile Tuple<Long, String> max;
+    private static class QueryReducer extends Reducer<Tuple<Long, String>, Tuple<Long, String>> {
+            private Tuple<Long, String> max;
             @Override
             public void beginReduce() {
                 max = new Tuple<>(0L, "");
             }
             @Override
-            public synchronized void reduce(Tuple<Long, String> integer) {
+            public void reduce(Tuple<Long, String> integer) {
                 if(max.getFirst() < integer.getFirst())
                     max = integer;
             }

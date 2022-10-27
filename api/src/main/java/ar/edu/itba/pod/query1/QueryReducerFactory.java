@@ -9,13 +9,13 @@ public class QueryReducerFactory implements ReducerFactory<String, Long,Long> {
         return new QueryReducer();
     }
     private static class QueryReducer extends Reducer<Long, Long> {
-            private volatile long sum;
+            private long sum;
             @Override
             public void beginReduce() {
                 sum = 0;
             }
             @Override
-            public synchronized void reduce(Long hourlyCount) {
+            public void reduce(Long hourlyCount) {
                 sum = sum + hourlyCount;
             }
 

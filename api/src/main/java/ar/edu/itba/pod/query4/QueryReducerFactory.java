@@ -17,7 +17,7 @@ public class QueryReducerFactory implements ReducerFactory<String, QueryReading,
     }
 
     private static class QueryReducer extends Reducer<QueryReading, Tuple<Month, Double>> {
-        private volatile Map<Month, Integer> countByMonth;
+        private Map<Month, Integer> countByMonth;
 
         @Override
         public void beginReduce() {
@@ -26,7 +26,7 @@ public class QueryReducerFactory implements ReducerFactory<String, QueryReading,
         }
 
         @Override
-        public synchronized void reduce(QueryReading queryReading) {
+        public void reduce(QueryReading queryReading) {
             Month m = queryReading.getMonth();
             int count = queryReading.getCount() + countByMonth.get(m);
             countByMonth.put(m, count);
