@@ -4,7 +4,6 @@ import ar.edu.itba.pod.models.Tuple;
 import com.hazelcast.mapreduce.Collator;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class QueryCollator implements Collator<Map.Entry<String,Long>, TreeMap<Long, List<Tuple<String,String>>>> {
 
@@ -29,7 +28,7 @@ public class QueryCollator implements Collator<Map.Entry<String,Long>, TreeMap<L
             }
         });
         //convert treemap into treemap with List of tuples between every sensor of the same category
-        var finalResults = new TreeMap<Long, List<Tuple<String,String>>>();
+        var finalResults = new TreeMap<Long, List<Tuple<String,String>>>(Comparator.reverseOrder());
         //filter from results the values with more than one sensor
             results.entrySet().stream().filter(entry -> entry.getValue().size() > 1).forEach(entry -> {
             List<Tuple<String,String>> list = new ArrayList<>();
@@ -44,33 +43,4 @@ public class QueryCollator implements Collator<Map.Entry<String,Long>, TreeMap<L
         return finalResults;
     }
 
-    static class AuxTuple<F,S> extends Tuple<F,S> {
-        public AuxTuple(F first, S second) {
-            super(first, second);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) return true;
-            if (obj == null || obj.getClass() != this.getClass()) return false;
-            var that = (AuxTuple) obj;
-            return (Objects.equals(this.getFirst(), that.getFirst()) && Objects.equals(this.getSecond(), that.getSecond())) ||
-                    (Objects.equals(this.getFirst(), that.getSecond()) && Objects.equals(this.getSecond(), that.getFirst()));
-        }
-
-        @Override
-        public int hashCode() {
-            return super.hashCode();
-        }
-
-        private static class TupleComparator implements java.util.Comparator<AuxTuple<String,String>> {
-            @Override
-            public int compare(AuxTuple<String, String> o1, AuxTuple<String, String> o2) {
-                //compare the first element with the first and second element of the tuple
-
-                var firstComparison = o2.getFirst().compareTo(o1.getFirst()) ;
-                return firstComparison == 0 ? o1.getSecond().compareTo(o2.getSecond()) : firstComparison;
-            }
-        }
-    }
 }

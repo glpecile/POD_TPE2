@@ -80,7 +80,6 @@ public class Client {
 
             IList<Tuple<Integer,Integer>> readingList = hazelcast.getList(HZ_READINGS_LIST);
             readingList.addAll(readings);
-            readingList.clear();
             timer.endLoadingDataToHazelcast();
 
             var dataSource = KeyValueSource.fromList(readingList);
