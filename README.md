@@ -10,7 +10,7 @@
     - [Query 2](#query-2)
     - [Query 3](#query-3)
     - [Query 4](#query-4)
-  - [Query 5](#query-5)
+    - [Query 5](#query-5)
   - [Informe](#informe)
 
 ## Autores
@@ -124,7 +124,7 @@ Donde:
 | `-Dn` | Cantidad máxima de sensores a consultar. |
 | `-Dyear` | Año a consultar. |
 
-## Query 5
+### Query 5
 
 Pares de sensores que registran la misma cantidad de millones de peatones.
 
