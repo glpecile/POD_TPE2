@@ -12,6 +12,7 @@
     - [Query 4](#query-4)
     - [Query 5](#query-5)
   - [Informe](#informe)
+  - [Correcciones](#correcciones)
 
 ## Autores
 
@@ -142,3 +143,21 @@ Donde:
 ## Informe
 
 La presentación se encuentra en el [directorio `/docs` del proyecto](/docs/POD-TPE2-G3-Informe.pdf).
+
+## Correcciones
+
+### Destacado
+
+- Buen informe, bien presentado los análisis de tiempos.
+- Modularización de la API.
+
+
+### Oportunidad de Mejora
+
+- Month y Day son funcionalidades que se pueden obtener en el paquete java.time
+- Q3: Utilizar el encabezado esperado.
+- Q3: Forzar la impresión de las horas con dos dígitos.
+
+### Errores
+
+- Q4: No está truncando los valores.
